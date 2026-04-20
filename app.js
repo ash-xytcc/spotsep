@@ -279,14 +279,17 @@ const BAYER_8 = [
 function shouldPrintPixel(x, y, pixelRgb, targetRgb, strength, halftoneEnabled, kind) {
   if (kind === 'white') return true;
   const dist = colorDistance(pixelRgb, targetRgb);
-  const solidThreshold = 8 + (100 - strength) * 0.08;
+  const printThreshold = 34 + (100 - strength) * 0.16;
   if (!halftoneEnabled || kind === 'black') {
-    return dist <= (28 + (100 - strength) * 0.15);
+    return dist <= printThreshold;
   }
+  const solidThreshold = 14 + (100 - strength) * 0.12;
+  const fadeThreshold = 60 + (100 - strength) * 0.18;
   if (dist <= solidThreshold) return true;
-  const normalized = clamp((dist - solidThreshold) / 80, 0, 1);
+  if (dist >= fadeThreshold) return false;
+  const tone = clamp((dist - solidThreshold) / Math.max(fadeThreshold - solidThreshold, 1), 0, 1);
   const matrixThreshold = (BAYER_8[y % 8][x % 8] + 0.5) / 64;
-  return normalized > matrixThreshold;
+  return matrixThreshold >= tone;
 }
 
 function addRegistrationMarks(ctx, width, height) {
