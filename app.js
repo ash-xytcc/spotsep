@@ -281,27 +281,34 @@ function shouldPrintPixel(x, y, pixelRgb, targetRgb, strength, halftoneEnabled, 
   const dist = colorDistance(pixelRgb, targetRgb);
   const lum = (pixelRgb[0] + pixelRgb[1] + pixelRgb[2]) / 3;
   const maxCh = Math.max(pixelRgb[0], pixelRgb[1], pixelRgb[2]);
+  const minCh = Math.min(pixelRgb[0], pixelRgb[1], pixelRgb[2]);
+  const chroma = maxCh - minCh;
 
   if (kind === 'black') {
-    const blackSolidThreshold = 72 + (100 - strength) * 0.18;
-    const deepBlackLum = 58 + (100 - strength) * 0.08;
-    const deepBlackMax = 92 + (100 - strength) * 0.06;
+    const blackSolidThreshold = 92 + (100 - strength) * 0.16;
+    const deepBlackLum = 84 + (100 - strength) * 0.10;
+    const deepBlackMax = 118 + (100 - strength) * 0.08;
     return dist <= blackSolidThreshold || (lum <= deepBlackLum && maxCh <= deepBlackMax);
   }
 
-  const printThreshold = 36 + (100 - strength) * 0.14;
+  const printThreshold = 42 + (100 - strength) * 0.10;
   if (!halftoneEnabled) {
     return dist <= printThreshold;
   }
 
-  const solidThreshold = 18 + (100 - strength) * 0.06;
-  const fadeThreshold = 64 + (100 - strength) * 0.12;
+  const solidThreshold = 24 + (100 - strength) * 0.08;
+  const fadeThreshold = 70 + (100 - strength) * 0.10;
   if (dist <= solidThreshold) return true;
   if (dist >= fadeThreshold) return false;
 
-  const tone = clamp((dist - solidThreshold) / Math.max(fadeThreshold - solidThreshold, 1), 0, 1);
+  if (chroma <= 12 && dist <= solidThreshold + 10) return true;
+
+  const toneStart = solidThreshold + 10;
+  if (dist <= toneStart) return true;
+
+  const tone = clamp((dist - toneStart) / Math.max(fadeThreshold - toneStart, 1), 0, 1);
   const matrixThreshold = (BAYER_8[y % 8][x % 8] + 0.5) / 64;
-  return matrixThreshold >= Math.min(0.985, tone * 1.12);
+  return matrixThreshold >= Math.min(0.99, tone * 1.18 + 0.16);
 }
 
 function addRegistrationMarks(ctx, width, height) {
