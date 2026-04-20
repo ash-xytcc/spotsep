@@ -29,7 +29,7 @@ h2 { margin: 0 0 10px; font-size: 1.1rem; }
 .upload-card input { display: none; }
 .upload-card span { font-size: 1.1rem; font-weight: 700; }
 .upload-card small { color: var(--muted); }
-.grid { display: grid; grid-template-columns: minmax(220px, 0.56fr) minmax(640px, 1.44fr); gap: 16px; align-items: start; }
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
 .hidden { display: none; }
 .panel { padding: 16px; min-width: 0; }
 .stack { display: grid; gap: 16px; }
@@ -38,14 +38,14 @@ h2 { margin: 0 0 10px; font-size: 1.1rem; }
 .pill { font-size: 12px; color: var(--muted); background: rgba(255,255,255,.06); border: 1px solid var(--border); border-radius: 999px; padding: 6px 10px; white-space: nowrap; }
 #previewImage, #livePreviewImage { width: 100%; border-radius: 14px; background: #f2f2f2; }
 .original-block img {
-  max-height: 120px;
+  max-height: 140px;
   width: auto;
   max-width: 100%;
   margin-inline: auto;
   object-fit: contain;
 }
 .preview-block img {
-  max-height: 190px;
+  max-height: 220px;
   width: auto;
   max-width: 100%;
   margin-inline: auto;

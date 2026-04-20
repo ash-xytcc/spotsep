@@ -283,13 +283,13 @@ function shouldPrintPixel(x, y, pixelRgb, targetRgb, strength, halftoneEnabled, 
   if (!halftoneEnabled || kind === 'black') {
     return dist <= printThreshold;
   }
-  const solidThreshold = 14 + (100 - strength) * 0.12;
-  const fadeThreshold = 60 + (100 - strength) * 0.18;
+  const solidThreshold = 10 + (100 - strength) * 0.08;
+  const fadeThreshold = 58 + (100 - strength) * 0.18;
   if (dist <= solidThreshold) return true;
   if (dist >= fadeThreshold) return false;
   const tone = clamp((dist - solidThreshold) / Math.max(fadeThreshold - solidThreshold, 1), 0, 1);
   const matrixThreshold = (BAYER_8[y % 8][x % 8] + 0.5) / 64;
-  return matrixThreshold >= tone;
+  return matrixThreshold >= Math.min(0.98, tone * 1.08 + 0.04);
 }
 
 function addRegistrationMarks(ctx, width, height) {
