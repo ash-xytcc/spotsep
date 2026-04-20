@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SpotSep</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">screenprint separations</p>
+          <h1>SpotSep</h1>
+          <p class="lede">
+            Built for posters, merch, and union print jobs that need to get in and out without a semester of prepress misery.
+            It finds likely inks, lets you keep or merge them, then previews the result live before export.
+          </p>
+        </div>
+        <label class="upload-card">
+          <input id="fileInput" type="file" accept=".svg,.png,.jpg,.jpeg" />
+          <span>Drop in artwork or click to upload</span>
+          <small>SVG, PNG, and JPG work. Everything runs in your browser, so this version is ready for static hosting.</small>
+        </label>
+      </section>
+
+      <section class="grid hidden" id="workspace">
+        <div class="panel stack left-column">
+          <div class="art-block original-block">
+            <h2>Original artwork</h2>
+            <p class="stats" id="imageStats"></p>
+            <img id="previewImage" alt="Artwork preview" />
+          </div>
+          <div class="art-block preview-block">
+            <div class="heading-row">
+              <h2>Live separation preview</h2>
+              <span class="pill" id="selectionSummary">No preview yet</span>
+            </div>
+            <p class="muted" id="previewNotes">Move the merge controls and SpotSep rebuilds the preview automatically.</p>
+            <img id="livePreviewImage" alt="Live separation preview" />
+          </div>
+        </div>
+
+        <div class="panel right-column">
+          <h2>Pick final plates</h2>
+          <p class="muted">Unchecked colors get reassigned to the closest kept plate. If you want to force one minor shade into a specific major ink, choose a merge target.</p>
+          <div class="swatches" id="swatches"></div>
+
+          <div class="controls">
+            <label>
+              <span>Color merge strength <strong id="toleranceValue">60</strong></span>
+              <input id="toleranceInput" type="range" min="0" max="100" value="60" />
+              <small>
+                Lower keeps more distinct shading before remap. Higher simplifies the artwork sooner and pushes more detail into your kept plates.
+              </small>
+            </label>
+            <label class="checkbox-row">
+              <input id="halftoneToggle" type="checkbox" checked />
+              <span>
+                Use dot pattern for shaded areas
+                <small>Flat fills stay solid. Only tonal and textured regions get dotted.</small>
+              </span>
+            </label>
+            <label class="checkbox-row">
+              <input id="registrationToggle" type="checkbox" checked />
+              <span>
+                Add registration marks to every plate
+                <small>Corner crosshairs get added to the exported PNG plates.</small>
+              </span>
+            </label>
+          </div>
+
+          <button id="exportBtn" class="primary" disabled>Export separations</button>
+        </div>
+      </section>
+
+      <section class="grid hidden" id="results">
+        <div class="panel">
+          <h2>Export</h2>
+          <div class="export-links" id="exportLinks"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
